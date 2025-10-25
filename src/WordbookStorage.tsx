@@ -1,5 +1,6 @@
 // src/storage/wordbookStorage.ts
 import { useSyncExternalStore } from "react";
+import { DEFAULT_TOEIC_500 } from "./data/DefaultWordbookToeic500";
 
 /** ===== Types (요청 포맷) ===== */
 export type WordEntry = {
@@ -17,7 +18,8 @@ export type Wordbook = {
 };
 
 /** ===== 내부 상태 & 유틸 ===== */
-const STORAGE_KEY = "wordbooks:v3";
+const STORAGE_KEY = "wordbooks:v1";
+const DEFAULT_WORDBOOK_FLAG_KEY = "wordbooks:seeded:v1";
 
 let state: Wordbook[] = load();
 const listeners = new Set<() => void>();
@@ -28,6 +30,15 @@ function uid() {
 function load(): Wordbook[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw){
+        if(!localStorage.getItem(DEFAULT_WORDBOOK_FLAG_KEY)){ // flag가 false면 기본 단어장 심기
+            const seeded = [makeSeedBook()];
+            localStorage.setItem(DEFAULT_WORDBOOK_FLAG_KEY, "true");
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(seeded));
+            return seeded;
+        }
+        return [];
+    }
     const parsed = raw ? (JSON.parse(raw) as Wordbook[]) : [];
     // 타입 보정: wrongCount 누락 대비
     return parsed.map((wb) => ({
@@ -54,6 +65,21 @@ function subscribe(l: () => void) {
 }
 function getSnapshot() {
   return state;
+}
+
+//기본 단어장 객체 생성 헬퍼
+function makeSeedBook(): Wordbook {
+  return {
+    id: uid(),
+    name: "TOEIC 500",
+    createdAt: Date.now(),
+    items: DEFAULT_TOEIC_500.map((i) => ({
+      term: i.term,
+      meaning: i.meaning,
+      note: i.note,
+      wrongCount: 0,
+    })),
+  };
 }
 
 /** ===== Public API (나중에 백엔드 연동 시 이 레이어만 교체) ===== */
