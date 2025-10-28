@@ -3,6 +3,8 @@ import React from "react";
 import WordbookUploader, { type Wordbook } from "./WordbookUploader";
 import WordbookQuiz from "./WordbookQuiz";
 import WordbookView from "./WordbookView";
+import ScoreBoard from "./ScoreBoard";
+import { ScoreStorage } from "./storage/scoreStorage";
 
 const WordbookPlayground: React.FC = () => {
   const [wb, setWb] = React.useState<Wordbook | null>(null);
@@ -14,6 +16,9 @@ const WordbookPlayground: React.FC = () => {
         <h1 className="text-xl font-semibold">매일500영단어</h1>
         <p className="text-sm opacity-80 mt-1">매일 영단어공부 화이팅!</p>
       </header>
+
+      <ScoreBoard /* globalRank={null} (백엔드 연동 시 주입) */ />
+
       <WordbookView
         onStartQuiz={(book) => { setWb(book); setOpen(true); }}
       />
@@ -29,6 +34,7 @@ const WordbookPlayground: React.FC = () => {
               wordbook={wb}
               secondsPerQuestion={5}
               onExit={() => setOpen(false)}
+              onFinished={(percent, correct) => ScoreStorage.awardQuiz(percent, correct)}
             />
         </div>
       )}
