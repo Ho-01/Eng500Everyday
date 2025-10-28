@@ -26,7 +26,7 @@ const ScoreBoard: React.FC<Props> = ({ globalRank = null }) => {
 
   return (
     <div className="mb-4">
-      <div className={`rounded-2xl border p-4 text-white ${tier.colorClass}`}>
+      <div className={`rounded-2xl border p-4 text-white/90 ${tier.colorClass}`}>
         <div className="flex items-center justify-between">
           <div>
             <div className="text-sm opacity-90">누적 점수</div>
@@ -43,7 +43,7 @@ const ScoreBoard: React.FC<Props> = ({ globalRank = null }) => {
             {/* Progress Bar */}
             <div className="h-2 rounded-full bg-white/30 overflow-hidden">
               <div
-                className="h-full bg-white transition-[width] duration-300"
+                className="h-full bg-white/90 transition-[width] duration-300"
                 style={{ width: `${progressPercent}%` }}
                 aria-hidden
               />

@@ -4,6 +4,18 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- React가 마운트되기 전에 테마 적용 -->
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem("theme");
+          var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+          var dark = saved ? saved === "dark" : prefersDark;
+          var c = document.documentElement.classList;
+          dark ? c.add("dark") : c.remove("dark");
+        } catch (e) {}
+      })();
+    </script>
     <title>eng500everyday</title>
   </head>
   <body>

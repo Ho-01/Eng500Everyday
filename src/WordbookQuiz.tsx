@@ -207,7 +207,7 @@ const WordbookQuiz: React.FC<WordbookQuizProps> = ({
 
         {/* Finished overlay */}
         {finished && (
-          <div className="absolute inset-0 bg-white/95 backdrop-blur flex items-center justify-center p-6">
+          <div className="absolute inset-0 bg-white backdrop-blur flex items-center justify-center p-6">
             <div className="w-full max-w-sm border rounded-2xl p-6 space-y-4">
               {/* 결과 요약 */}
               <div className="text-center">
@@ -236,13 +236,13 @@ const WordbookQuiz: React.FC<WordbookQuizProps> = ({
               </div>
 
               {/* 미니 티어 카드 */}
-              <div className={`rounded-xl border p-3 text-white ${previewTier.colorClass}`}>
+              <div className={`rounded-xl border p-3 text-white/90 ${previewTier.colorClass}`}>
                 <div className="flex items-center justify-between text-sm">
                   <div className="flex items-center gap-2 font-semibold">
                     <span>{previewTier.label}</span>
                     {promoted && (
                         <span
-                            className="text-[11px] px-2 py-0.5 rounded-full bg-yellow-200 text-black font-semibold shadow animate-pulse" // [추가]
+                            className="text-[11px] px-2 py-0.5 rounded-full bg-yellow-200 text-black/90 font-semibold shadow animate-pulse" // [추가]
                         title={`${prevTier.label} → ${previewTier.label}`} // 승급뱃지
                         >
                             승급했어요!
@@ -254,7 +254,7 @@ const WordbookQuiz: React.FC<WordbookQuizProps> = ({
                 <div className="mt-2">
                   <div className="h-1.5 rounded-full bg-white/30 overflow-hidden">
                     <div
-                      className="h-full bg-white transition-[width] duration-300"
+                      className="h-full bg-white/90 transition-[width] duration-300"
                       style={{ width: `${previewProgressPercent}%` }}
                       aria-hidden
                     />

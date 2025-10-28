@@ -1,0 +1,34 @@
+/* 테마 힌트 */
+:root { color-scheme: light; }
+.dark { color-scheme: dark; }
+
+/* 메인페이지 헤더 */
+.dark :where(.bg-black\/80) { background-color: rgba(255, 255, 255, 0.7) !important; }
+.dark :where(.supports-\[backdrop-filter\]\:bg-black\/60) { background-color: rgba(255, 255, 255, 0.4) !important; }
+
+
+/* 배경: 자주 쓰는 클래스만 우선 커버 */
+.dark :where(.bg-white)      { background-color:#0b0b0b !important; }
+.dark :where(.bg-black)      { background-color:#f9f9f9 !important; }
+.dark :where(.bg-neutral-50),
+.dark :where(.bg-gray-50)    { background-color:#111111 !important; }
+.dark :where(.bg-gray-100)   { background-color:#121212 !important; }
+
+/* 텍스트 */
+.dark :where(.text-black)    { color:#ffffff !important; }
+.dark :where(.text-white)    { color:#000000 !important; }
+.dark :where(.text-gray-900) { color:#e5e7eb !important; }
+
+/* 보더 */
+.dark :where(.border)                    { border-color:rgb(255, 255, 255) !important; }
+.dark :where(.border-neutral-200),
+.dark :where(.border-gray-200)          { border-color:#3f3f46 !important; }
+
+/* 카드 그림자 (선택) */
+.dark :where(.shadow, .shadow-sm, .shadow-md) {
+  box-shadow: 0 1px 2px rgba(0,0,0,.5), 0 1px 1px rgba(0,0,0,.3) !important;
+}
+
+/* 입력창 */
+.dark :where(input, textarea, select)                { background:#0f0f0f !important; color:#fff !important; border-color:#3f3f46 !important; }
+.dark :where(input::placeholder, textarea::placeholder) { color:#9ca3af !important; }
