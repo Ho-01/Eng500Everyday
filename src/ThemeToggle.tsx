@@ -4,20 +4,22 @@ import React from "react";
 type Theme = "light" | "dark";
 
 function getInitialTheme(): Theme {
-  // localStorage 우선, 없으면 시스템 선호
+  // 저장값 없으면 'light'
   try {
     const saved = localStorage.getItem("theme") as Theme | null;
-    if (saved === "light" || saved === "dark") return saved;
+    if (saved === "dark" || saved === "light") return saved;
   } catch {}
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  return "light"; // 기본 라이트
 }
 
+// 적용 함수도 meta theme-color까지 갱신
 function applyTheme(t: Theme) {
   const root = document.documentElement.classList;
   t === "dark" ? root.add("dark") : root.remove("dark");
-  try {
-    localStorage.setItem("theme", t);
-  } catch {}
+  try { localStorage.setItem("theme", t); } catch {}
+
+  const meta = document.querySelector('meta[name="theme-color"]') as HTMLMetaElement | null;
+  if (meta) meta.setAttribute("content", t === "dark" ? "#0b0b0b" : "#ffffff");
 }
 
 const ThemeToggle: React.FC = () => {
