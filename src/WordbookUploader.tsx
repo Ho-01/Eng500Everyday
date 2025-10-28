@@ -146,6 +146,7 @@ const WordbookUploader: React.FC<Props> = ({ onParsed }) => {
 
   const handleWordbookSave = (wb: Wordbook) => {
     WordbookStorage.addWordbook({ name: wb.name, items: wb.items });
+    setWordbook(null);
     alert(`단어장 "${wb.name}"이(가) 저장되었습니다! (기능 미구현)`);
   };
 

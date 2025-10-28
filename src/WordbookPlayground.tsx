@@ -8,8 +8,9 @@ import { ScoreStorage } from "./storage/scoreStorage";
 import ThemeToggle from "./ThemeToggle";
 
 const WordbookPlayground: React.FC = () => {
-  const [wb, setWb] = React.useState<Wordbook | null>(null);
-  const [open, setOpen] = React.useState(false);
+  const [wb, setWb] = React.useState<Wordbook | null>(null); // 문제풀기 버튼이 눌린 단어장
+  const [open, setOpen] = React.useState(false); // 퀴즈 모달 열림 상태
+  const [isDetail, setIsDetail] = React.useState(false); // 단어장 상세보기 모드인지 여부
 
   return (
     <div className="mx-auto max-w-md px-4 pb-4 pt-0">
@@ -26,12 +27,15 @@ const WordbookPlayground: React.FC = () => {
         </div>
       </header>
 
-      <ScoreBoard /* globalRank={null} (백엔드 연동 시 주입) */ />
+      {/* [변경] 상세보기 상태가 아닐 때만 스코어보드 표시 */}
+      {!isDetail && <ScoreBoard /* globalRank={null} (백엔드 연동 시 주입) */ />}
 
       <WordbookView
+        onDetailChange={setIsDetail}
         onStartQuiz={(book) => { setWb(book); setOpen(true); }}
       />
-      {!open && (
+
+      {!isDetail && !open && (
         <div>
             <WordbookUploader onParsed={setWb} />
         </div>

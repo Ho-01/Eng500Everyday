@@ -1,5 +1,5 @@
 // src/components/WordbookView.tsx
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { WordbookStorage, type TWordbook } from "./WordbookStorage";
 
 /**
@@ -12,9 +12,10 @@ import { WordbookStorage, type TWordbook } from "./WordbookStorage";
 // 퀴즈 시작을 위한 선택적 프롭 (최소 변경)
 type Props = {
   onStartQuiz?: (wb: { name: string; items: { term: string; meaning: string; note?: string }[] }) => void; // 퀴즈용 타입으로 전달
+  onDetailChange?: (isDetail: boolean) => void; // 상세 보기 상태 통지
 };
 
-const WordbookView: React.FC<Props> = ({ onStartQuiz }) => {
+const WordbookView: React.FC<Props> = ({ onStartQuiz, onDetailChange }) => {
   const books = WordbookStorage.useWordbooks();
 
   // 화면 모드: 전체 단어장 목록 / 단어장 상세
@@ -29,16 +30,23 @@ const WordbookView: React.FC<Props> = ({ onStartQuiz }) => {
   const [newMeaning, setNewMeaning] = useState("");
   const [newNote, setNewNote] = useState("");
 
+  // 상세화면 선택된 단어장
   const activeBook: TWordbook | undefined = useMemo(
     () => books.find((b) => b.id === activeId),
     [books, activeId]
   );
+
+  // 상세 보기(isDetail) 상태가 바뀔 때마다 부모에 알려줌
+  useEffect(() => {
+    onDetailChange?.(Boolean(activeBook));
+  }, [activeBook, onDetailChange]);
 
   // TWordbook 타입을 퀴즈용 타입으로 변환하는 헬퍼
   const toQuizWordbook = (b: TWordbook) => ({
     name: b.name,
     items: b.items.map(({ term, meaning, note }) => ({ term, meaning, note })),
   });
+
   // 퀴즈 시작 가능 여부 : 단어가 4개 이상인가?
   const canStartQuiz = (b: TWordbook) => new Set(b.items.map((i) => i.meaning)).size >= 4;
 
