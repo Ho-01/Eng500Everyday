@@ -1,6 +1,6 @@
 // src/components/ScoreBoard.tsx
 import React from "react";
-import { ScoreStorage, computeTier } from "./storage/scoreStorage";
+import { ScoreStorage, computeTier } from "../storage/scoreStorage";
 
 type Props = {
   globalRank?: number | null; // 백엔드 연동 시 상위 10/100 처리용
@@ -65,11 +65,11 @@ const ScoreBoard: React.FC<Props> = ({ globalRank = null }) => {
           >
             {attended ? "오늘 출석 완료" : "출석하기 +20"}
           </button>
-          {/* 디버그용: 필요 시 주석 해제
+          {/* 디버그용: 필요 시 주석 해제*/}
           <button onClick={() => ScoreStorage.reset()} className="text-xs px-3 py-2 rounded-full border bg-white/15">
-            점수 초기화
+            점수 초기화 (주의! 되돌릴 수 없음!)
           </button>
-          */}
+          
         </div>
       </div>
     </div>

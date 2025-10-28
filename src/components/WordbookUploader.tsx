@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState } from "react";
 import * as XLSX from "xlsx";
-import { WordbookStorage } from "./WordbookStorage";
+import { WordbookStorage } from "../storage/wordbookStorage";
 
 // ==== Types ====
 export type WordEntry = {

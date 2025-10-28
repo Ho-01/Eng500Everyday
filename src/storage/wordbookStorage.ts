@@ -1,6 +1,6 @@
 // src/storage/wordbookStorage.ts
 import { useSyncExternalStore } from "react";
-import { DEFAULT_TOEIC_500 } from "./data/DefaultWordbookToeic500";
+import { DEFAULT_TOEIC_500 } from "../data/DefaultWordbookToeic500";
 
 /** ===== Types (요청 포맷) ===== */
 export type WordEntry = {

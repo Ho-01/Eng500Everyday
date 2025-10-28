@@ -1,4 +1,4 @@
-import WordbookPlayground from "./WordbookPlayground";
+import WordbookPlayground from "./components/WordbookPlayground";
 
 function App() {
 

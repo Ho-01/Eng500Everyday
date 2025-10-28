@@ -4,7 +4,7 @@ import WordbookUploader, { type Wordbook } from "./WordbookUploader";
 import WordbookQuiz from "./WordbookQuiz";
 import WordbookView from "./WordbookView";
 import ScoreBoard from "./ScoreBoard";
-import { ScoreStorage } from "./storage/scoreStorage";
+import { ScoreStorage } from "../storage/scoreStorage";
 import ThemeToggle from "./ThemeToggle";
 
 const WordbookPlayground: React.FC = () => {

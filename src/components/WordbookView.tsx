@@ -1,6 +1,6 @@
 // src/components/WordbookView.tsx
 import React, { useMemo, useState, useEffect } from "react";
-import { WordbookStorage, type TWordbook } from "./WordbookStorage";
+import { WordbookStorage, type TWordbook } from "../storage/wordbookStorage";
 
 /**
  * 화면 구성

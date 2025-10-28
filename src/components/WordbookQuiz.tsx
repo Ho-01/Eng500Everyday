@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
-//  점수/티어 계산 불러오기
-import { ScoreStorage, computeTier } from "./storage/scoreStorage";
+import { ScoreStorage, computeTier } from "../storage/scoreStorage";
+import { usePronounce } from "../hooks/usePronounce";
+import SpeakerButton from "./SpeakerButton";
 
 // ===== 타입 =====
 export type WordEntry = {
@@ -84,6 +85,8 @@ const WordbookQuiz: React.FC<WordbookQuizProps> = ({
   const { score: baseScore } = ScoreStorage.useScore();         // 실시간 누적 점수
   const [baseAtFinish, setBaseAtFinish] = useState<number | null>(null); // 완료 순간의 누적 점수 스냅샷
 
+  const { supports, isSpeaking, speak, cancel, autoOnce, resetAuto } = usePronounce("en-US", 0.95);
+
   // 문제 전환 시 타이머 리셋
   useEffect(() => {
     setSelected(null);
@@ -102,6 +105,13 @@ const WordbookQuiz: React.FC<WordbookQuizProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idx, QUESTION_TIME_MS]);
 
+  // 문제 바뀔 때 자동 1회 발음
+  useEffect(() => {
+    if (!supports || finished) return;
+    const current = quizItems[idx];
+    if (current?.term) autoOnce(`q-${idx}`, current.term, 120);
+  }, [idx, finished, supports, quizItems, autoOnce]);
+
   const total = quizItems.length;
   const current = quizItems[idx];
 
@@ -116,6 +126,7 @@ const WordbookQuiz: React.FC<WordbookQuizProps> = ({
   const next = (_optIndex: number | null) => {
     if (idx + 1 < total) setIdx((i) => i + 1);
     else setFinished(true);
+    cancel(); // 다음 문제로 넘어갈 때 겹침 방지
   };
 
   const restart = () => {
@@ -125,6 +136,8 @@ const WordbookQuiz: React.FC<WordbookQuizProps> = ({
     setTimeLeftMs(QUESTION_TIME_MS);
     setFinished(false);
     setBaseAtFinish(null); // 리셋 시 스냅샷도 초기화
+    resetAuto();
+    cancel();
   };
 
   // 완료되면 1회만 (정답률, 맞춘개수) 전달 + 베이스 점수 스냅샷 고정
@@ -179,6 +192,11 @@ const WordbookQuiz: React.FC<WordbookQuizProps> = ({
         {/* Question */}
         <main className="px-4 py-6 flex-1 flex flex-col">
           <div className="text-2xl font-bold text-center break-words">{current.term}</div>
+          {supports && (
+           <div className="mt-3 flex justify-center">
+             <SpeakerButton onClick={() => speak(quizItems[idx].term)} speaking={isSpeaking} label="발음 듣기" />
+           </div>
+          )}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6">
             {current.options.map((opt, i) => {
               const isPicked = selected === i;
