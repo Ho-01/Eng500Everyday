@@ -6,6 +6,7 @@ import WordbookView from "./WordbookView";
 import ScoreBoard from "./ScoreBoard";
 import { ScoreStorage } from "../storage/scoreStorage";
 import { type Wordbook } from "../storage/wordbookStorage";
+import { AccuracyStorage } from "../storage/accuracyStorage";
 import ThemeToggle from "./ThemeToggle";
 
 const WordbookPlayground: React.FC = () => {
@@ -48,7 +49,10 @@ const WordbookPlayground: React.FC = () => {
               wordbook={wb}
               secondsPerQuestion={5}
               onExit={() => setOpen(false)}
-              onFinished={(percent, correct) => ScoreStorage.awardQuiz(percent, correct)}
+              onFinished={(percent, correct) => {
+                ScoreStorage.awardQuiz(percent, correct);
+                AccuracyStorage.addRecord(wb.id, percent, correct); // 단어장별 퀴즈 완주기록 저장
+              }}
             />
         </div>
       )}

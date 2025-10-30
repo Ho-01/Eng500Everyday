@@ -4,6 +4,8 @@ import { usePronounce } from "../hooks/usePronounce";
 import SpeakerButton from "./SpeakerButton";
 import { WordbookStorage, type QuizResultItem } from "../storage/wordbookStorage";
 import { type Wordbook, type WordEntry } from "../storage/wordbookStorage";
+import WordbookAccuracyChart from "./WordbookAccuracyChart";
+import { AccuracyStorage } from "../storage/accuracyStorage";
 
 export type WordbookQuizProps = {
   wordbook: Wordbook;
@@ -256,6 +258,9 @@ const WordbookQuiz: React.FC<WordbookQuizProps> = ({
                   </div>
                 </div>
               </div>
+
+              {/* 단어장별 정답률 추이 그래프 */}
+              <WordbookAccuracyChart wordbookId={wordbook.id} />
 
               {/* 미니 티어 카드 */}
               <div className={`rounded-xl border p-3 text-white/90 ${previewTier.colorClass}`}>
