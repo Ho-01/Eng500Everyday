@@ -1,10 +1,11 @@
 // WordbookPlayground.tsx
 import React from "react";
-import WordbookUploader, { type Wordbook } from "./WordbookUploader";
+import WordbookUploader from "./WordbookUploader";
 import WordbookQuiz from "./WordbookQuiz";
 import WordbookView from "./WordbookView";
 import ScoreBoard from "./ScoreBoard";
 import { ScoreStorage } from "../storage/scoreStorage";
+import { type Wordbook } from "../storage/wordbookStorage";
 import ThemeToggle from "./ThemeToggle";
 
 const WordbookPlayground: React.FC = () => {
@@ -37,7 +38,7 @@ const WordbookPlayground: React.FC = () => {
 
       {!isDetail && !open && (
         <div>
-            <WordbookUploader onParsed={setWb} />
+            <WordbookUploader />
         </div>
       )}
 

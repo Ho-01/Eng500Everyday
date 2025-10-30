@@ -11,7 +11,7 @@ import { WordbookStorage, type TWordbook } from "../storage/wordbookStorage";
 
 // 퀴즈 시작을 위한 선택적 프롭 (최소 변경)
 type Props = {
-  onStartQuiz?: (wb: { name: string; items: { term: string; meaning: string; note?: string }[] }) => void; // 퀴즈용 타입으로 전달
+  onStartQuiz?: (wb: TWordbook) => void; // TWordbook 타입으로 전달
   onDetailChange?: (isDetail: boolean) => void; // 상세 보기 상태 통지
 };
 
@@ -40,12 +40,6 @@ const WordbookView: React.FC<Props> = ({ onStartQuiz, onDetailChange }) => {
   useEffect(() => {
     onDetailChange?.(Boolean(activeBook));
   }, [activeBook, onDetailChange]);
-
-  // TWordbook 타입을 퀴즈용 타입으로 변환하는 헬퍼
-  const toQuizWordbook = (b: TWordbook) => ({
-    name: b.name,
-    items: b.items.map(({ term, meaning, note }) => ({ term, meaning, note })),
-  });
 
   // 퀴즈 시작 가능 여부 : 단어가 4개 이상인가?
   const canStartQuiz = (b: TWordbook) => new Set(b.items.map((i) => i.meaning)).size >= 4;
@@ -95,7 +89,7 @@ const WordbookView: React.FC<Props> = ({ onStartQuiz, onDetailChange }) => {
           {books.map((b) => {
             const quizable = canStartQuiz(b);
             return (
-              <li key={b.id} className="rounded-2xl border shadow-sm overflow-hidden bg-white">
+              <li key={b.id} className="rounded-2xl border border-gray-500 shadow-md overflow-hidden bg-white">
                 <div className="flex items-center justify-between gap-2 p-4">
                   {/* 이름/개수/생성시기 */}
                   <button onClick={() => setActiveId(b.id)} className="text-left flex-1">
@@ -120,7 +114,7 @@ const WordbookView: React.FC<Props> = ({ onStartQuiz, onDetailChange }) => {
                         <span>{b.name}</span>
                       </div>
                       <div>
-                        <span className="text-[11px] px-2 py-0.5 rounded-full border bg-neutral-50">
+                        <span className="text-[11px] px-2 py-0.5 rounded-full border border-gray-500 bg-neutral-50">
                           단어 개수 : {b.items.length.toLocaleString()}개
                         </span>
                       </div>
@@ -133,15 +127,15 @@ const WordbookView: React.FC<Props> = ({ onStartQuiz, onDetailChange }) => {
                 {renamingId !== b.id && (
                   <div className="flex items-center gap-2">
                     <button
-                        onClick={() => onStartQuiz?.(toQuizWordbook(b))}
+                        onClick={() => onStartQuiz?.(b)}
                         disabled={!quizable}
                         title={quizable ? "이 단어장으로 문제풀기" : "서로 다른 한글 뜻이 4개 이상 필요해요"}
                         className={`text-xs px-3 py-2 rounded-full border ${quizable ? "bg-black text-white" : "opacity-50"}`}
                     >
                         문제풀기
                     </button>
-                    <button onClick={() => startRename(b)} className="text-xs px-3 py-2 rounded-full border">이름변경</button>
-                    <button onClick={() => removeBook(b)} className="text-xs px-3 py-2 rounded-full border">삭제</button>
+                    <button onClick={() => startRename(b)} className="text-xs px-3 py-2 rounded-full border border-gray-500">이름변경</button>
+                    <button onClick={() => removeBook(b)} className="text-xs px-3 py-2 rounded-full border border-gray-500">삭제</button>
                   </div>
                 )}
               </div>

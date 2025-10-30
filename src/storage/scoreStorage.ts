@@ -53,6 +53,7 @@ export type TierInfo = {
   label: string;            // 예: "브론즈3", "마스터 2단계", "챌린저 5등"
   baseLabel: string;        // 점수 기반 기본 티어 (챌린저/그마 제외)
   colorClass: string;       // Tailwind gradient 클래스
+  broad: number;        // 현재 티어의 폭 (다음 티어까지 몇 점 구간인지)
   nextAt: number | null;    // 다음 티어까지 남은 점수 (마스터는 100점 단위)
 };
 
@@ -70,33 +71,33 @@ function tierColor(base: string): string {
   }
 }
 
-function tierByScore(score: number): { baseLabel: string; detail: string; nextAt: number | null } {
+function tierByScore(score: number): { baseLabel: string; detail: string; broad: number, nextAt: number | null } {
   // 0~100: 브론즈3, 100~200: 브론즈2, ... 1400~1500: 다이아1, 1500~: 마스터 N단계(100점마다)
   const bands = [
-    { max: 100, base: "브론즈", sub: "3" },
-    { max: 200, base: "브론즈", sub: "2" },
-    { max: 300, base: "브론즈", sub: "1" },
-    { max: 400, base: "실버", sub: "3" },
-    { max: 500, base: "실버", sub: "2" },
-    { max: 600, base: "실버", sub: "1" },
-    { max: 700, base: "골드", sub: "3" },
-    { max: 800, base: "골드", sub: "2" },
-    { max: 900, base: "골드", sub: "1" },
-    { max: 1000, base: "플래티넘", sub: "3" },
-    { max: 1100, base: "플래티넘", sub: "2" },
-    { max: 1200, base: "플래티넘", sub: "1" },
-    { max: 1300, base: "다이아몬드", sub: "3" },
-    { max: 1400, base: "다이아몬드", sub: "2" },
-    { max: 1500, base: "다이아몬드", sub: "1" },
+    { min: 0, max: 100, base: "브론즈", sub: "3" },
+    { min: 100, max: 200, base: "브론즈", sub: "2" },
+    { min: 200, max: 300, base: "브론즈", sub: "1" },
+    { min: 300, max: 400, base: "실버", sub: "3" },
+    { min: 400, max: 500, base: "실버", sub: "2" },
+    { min: 500, max: 600, base: "실버", sub: "1" },
+    { min: 600, max: 700, base: "골드", sub: "3" },
+    { min: 700, max: 800, base: "골드", sub: "2" },
+    { min: 800, max: 900, base: "골드", sub: "1" },
+    { min: 900, max: 1100, base: "플래티넘", sub: "3" },
+    { min: 1100, max: 1300, base: "플래티넘", sub: "2" },
+    { min: 1300, max: 1500, base: "플래티넘", sub: "1" },
+    { min: 1500, max: 1700, base: "다이아몬드", sub: "3" },
+    { min: 1700, max: 1900, base: "다이아몬드", sub: "2" },
+    { min: 1900, max: 2100, base: "다이아몬드", sub: "1" },
   ];
   for (const b of bands) {
-    if (score < b.max) return { baseLabel: b.base, detail: `${b.base}${b.sub}`, nextAt: b.max - score };
+    if (score < b.max) return { baseLabel: b.base, detail: `${b.base}${b.sub}`, broad: b.max - b.min, nextAt: b.max - score };
   }
-  // 1500 이상: 마스터 N단계 (100점마다 1단계)
-  const over = score - 1500;
+  // 2100 이상: 마스터 N단계 (100점마다 1단계)
+  const over = score - 2100;
   const stage = Math.floor(over / 100) + 1;
   const remainder = 100 - (over % 100 || 0);
-  return { baseLabel: "마스터", detail: `마스터 ${stage}단계`, nextAt: remainder === 100 ? 100 : remainder };
+  return { baseLabel: "마스터", detail: `마스터 ${stage}단계`, broad: 100, nextAt: remainder === 100 ? 100 : remainder };
 }
 
 export function computeTier(score: number, globalRank?: number | null): TierInfo {
@@ -116,7 +117,7 @@ export function computeTier(score: number, globalRank?: number | null): TierInfo
       color = tierColor("그랜드마스터");
     }
   }
-  return { label, baseLabel, colorClass: `bg-gradient-to-r ${color}`, nextAt: base.nextAt };
+  return { label, baseLabel, colorClass: `bg-gradient-to-r ${color}`, broad: base.broad, nextAt: base.nextAt };
 }
 
 export const ScoreStorage = {

@@ -17,6 +17,9 @@ export type Wordbook = {
   createdAt: number;
 };
 
+// 퀴즈 결과(한 회차) 타입: 완료 시 누적오답횟수 일괄 반영에 사용
+export type QuizResultItem = { term: string; isCorrect: boolean };
+
 /** ===== 내부 상태 & 유틸 ===== */
 const STORAGE_KEY = "wordbooks:v1";
 const DEFAULT_WORDBOOK_FLAG_KEY = "wordbooks:seeded:v1";
@@ -142,6 +145,35 @@ export const WordbookStorage = {
     await new Promise((r) => setTimeout(r, 300));
     console.log("[mock] 최신화 완료(모의). 현재 개수:", state.length);
     // 필요하면 state = 서버데이터; emit();
+  },
+
+  // 퀴즈 완료 시점에만 오답 누적을 한 번에 반영
+  // items: 이번 회차의 각 문항 결과 목록(정답/오답), 오답만 합산하여 wrongCount 증가
+  applyResultsBatchWrongOnly(bookId: string, items: QuizResultItem[]) {
+    if (!items?.length) return;
+
+    // term별 오답 횟수 집계
+    const wrongMap = new Map<string, number>(); // term -> 누적 오답 수
+    for (const it of items) {
+      if (!it.isCorrect) {
+        wrongMap.set(it.term, (wrongMap.get(it.term) ?? 0) + 1);
+      }
+    }
+    if (wrongMap.size === 0) return; // 전부 정답이면 변화 없음
+
+    // 타겟 단어장 찾아서 items만 갱신
+    state = state.map((b) => {
+      if (b.id !== bookId) return b;
+      const nextItems = b.items.map((w) => {
+        const wrongPlus = wrongMap.get(w.term) ?? 0;
+        return wrongPlus
+          ? { ...w, wrongCount: Math.max(0, (w.wrongCount ?? 0) + wrongPlus) } // [추가]
+          : w;
+      });
+      return { ...b, items: nextItems };
+    });
+
+    emit();
   },
 };
 

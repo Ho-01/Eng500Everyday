@@ -12,8 +12,8 @@ const ScoreBoard: React.FC<Props> = ({ globalRank = null }) => {
 
   const progressPercent = React.useMemo(() => {
     if (tier.nextAt == null) return 100;
-    const p = 100 - tier.nextAt; // 0~100
-    return Math.max(0, Math.min(100, p));
+    const p = tier.broad - tier.nextAt; // 현재 티어 폭에서 다음 티어까지 남은 점수를 뺀 값 = 진행된 점수
+    return Math.max(0, Math.min(100, (p / tier.broad) * 100));
   }, [tier.nextAt]);
 
   const attended = (() => {
