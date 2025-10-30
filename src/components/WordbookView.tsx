@@ -1,6 +1,7 @@
 // src/components/WordbookView.tsx
 import React, { useMemo, useState, useEffect } from "react";
 import { WordbookStorage, type TWordbook } from "../storage/wordbookStorage";
+import WordbookAccuracyChart from "./WordbookAccuracyChart";
 
 /**
  * 화면 구성
@@ -134,8 +135,8 @@ const WordbookView: React.FC<Props> = ({ onStartQuiz, onDetailChange }) => {
                     >
                         문제풀기
                     </button>
-                    <button onClick={() => startRename(b)} className="text-xs px-3 py-2 rounded-full border border-gray-500">이름변경</button>
-                    <button onClick={() => removeBook(b)} className="text-xs px-3 py-2 rounded-full border border-gray-500">삭제</button>
+                    <button onClick={() => startRename(b)} className="text-xs px-3 py-2 rounded-full border border-gray-500 shadow-md">이름변경</button>
+                    <button onClick={() => removeBook(b)} className="text-xs px-3 py-2 rounded-full border border-gray-500 shadow-md">삭제</button>
                   </div>
                 )}
               </div>
@@ -154,12 +155,15 @@ const WordbookView: React.FC<Props> = ({ onStartQuiz, onDetailChange }) => {
   return (
     <section className="mt-6">
       <div className="flex items-center justify-between mb-3">
-        <button onClick={() => setActiveId(null)} className="text-xs px-3 py-2 rounded-full border">← 뒤로가기</button>
+        <button onClick={() => setActiveId(null)} className="text-xs px-3 py-2 rounded-full border border-gray-500 shadow-md">← 뒤로가기</button>
         <div className="text-lg font-semibold opacity-70">{activeBook.name}</div>
       </div>
 
+      {/* 단어장별 정답률 추이 그래프 */}
+      <WordbookAccuracyChart wordbookId={activeBook.id} />
+
       {/* 단어 추가 폼 */}
-      <div className="rounded-xl border p-3 mb-4">
+      <div className="rounded-xl border border-gray-500 shadow-md p-3 mb-4">
         <div className="text-sm font-medium mb-2">단어 추가</div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
           <input
@@ -189,7 +193,7 @@ const WordbookView: React.FC<Props> = ({ onStartQuiz, onDetailChange }) => {
       {/* 단어 목록 */}
       <ul className="space-y-2">
         {activeBook.items.map((w, idx) => (
-          <li key={`${w.term}-${idx}`} className="rounded-xl border p-4">
+          <li key={`${w.term}-${idx}`} className="rounded-xl border border-gray-500 shadow-md p-4">
             <div className="flex items-start justify-between gap-3">
               <div>
                 <div className="font-semibold">{w.term}</div>
@@ -199,7 +203,7 @@ const WordbookView: React.FC<Props> = ({ onStartQuiz, onDetailChange }) => {
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-[10px] opacity-60 pt-1">#{idx + 1}</span>
-                <button onClick={() => removeEntry(idx)} className="text-xs px-3 py-2 rounded-full border">삭제</button>
+                <button onClick={() => removeEntry(idx)} className="text-xs px-3 py-2 rounded-full border border-gray-500 shadow-md">삭제</button>
               </div>
             </div>
           </li>
