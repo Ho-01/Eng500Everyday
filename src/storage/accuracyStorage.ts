@@ -43,9 +43,9 @@ function subscribe(l: () => void) {
   return () => listeners.delete(l);
 }
 
-function getSnapshot() {
-  return state;
-}
+// function getSnapshot() {
+//   return state;
+// }
 
 export const AccuracyStorage = {
   /** 특정 단어장의 이력 구독 */

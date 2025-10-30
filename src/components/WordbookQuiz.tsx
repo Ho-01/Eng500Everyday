@@ -5,7 +5,6 @@ import SpeakerButton from "./SpeakerButton";
 import { WordbookStorage, type QuizResultItem } from "../storage/wordbookStorage";
 import { type Wordbook, type WordEntry } from "../storage/wordbookStorage";
 import WordbookAccuracyChart from "./WordbookAccuracyChart";
-import { AccuracyStorage } from "../storage/accuracyStorage";
 
 export type WordbookQuizProps = {
   wordbook: Wordbook;
