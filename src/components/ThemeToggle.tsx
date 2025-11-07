@@ -34,7 +34,7 @@ const ThemeToggle: React.FC = () => {
   return (
     <button
       onClick={toggle}
-      className="text-xs px-3 py-1.5 rounded-full border bg-white/80 dark:bg-white/10 dark:text-white hover:opacity-90 active:scale-[0.98]"
+      className="text-xs px-3 py-1.5 rounded-full border border-black-200 bg-white/80 text-black dark:bg-white/10 dark:text-white hover:opacity-90 active:scale-[0.98]"
       aria-label="테마 전환" // 접근성
       title={theme === "dark" ? "라이트 모드로" : "다크 모드로"}
     >

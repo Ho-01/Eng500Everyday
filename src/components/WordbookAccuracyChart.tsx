@@ -29,11 +29,12 @@ const WordbookAccuracyChart: React.FC<{ wordbookId: string }> = ({ wordbookId })
   }
 
   return (
-    <div className="w-full h-40 my-3">
+    <div className="w-full h-40 my-3 border border-gray-300 shadow-md rounded-xl p-3">
+      <div className="text-sm font-semibold mb-2">정답률 그래프</div>
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
           data={data.slice(-10)} // 최근 10회만 표시
-          margin={{ top: 10, right: 20, left: 10, bottom: 20 }}
+          margin={{ top: 10, right: 20, left: 5, bottom: 30 }}
         >
           <CartesianGrid strokeDasharray="3 3" stroke="#333" opacity={0.2} />
           <XAxis

@@ -32,6 +32,7 @@ const headerMap: Record<"term" | "meaning" | "note", string[]> = {
     "eng",
     "단어",
     "영어",
+    "영단어",
     "표제어",
   ],
   meaning: [
@@ -151,14 +152,14 @@ const WordbookUploader: React.FC<Props> = ({ onParsed }) => {
   };
 
   return (
-    <div className="mt-6 mb-20">
+    <div className="mt-6 mb-6">
       <h2 className="text-lg font-semibold mb-3">단어장 업로드</h2>
 
       {/* 업로드 영역 */}
       {!wordbook && (
         <label
           htmlFor="file"
-          className="block border-2 border-dashed rounded-2xl p-6 text-center text-sm cursor-pointer active:scale-[0.99] select-none"
+          className="block border-2 border-dashed border-gray-300 shadow-sm rounded-2xl p-6 text-center text-sm cursor-pointer active:scale-[0.99] select-none"
         >
           <div className="mb-2 font-medium">엑셀 파일 업로드</div>
           <div className="opacity-70">터치해서 선택하거나, 드래그해서 올려도 돼요</div>

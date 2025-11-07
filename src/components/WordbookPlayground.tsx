@@ -8,6 +8,7 @@ import { ScoreStorage } from "../storage/scoreStorage";
 import { type Wordbook } from "../storage/wordbookStorage";
 import { AccuracyStorage } from "../storage/accuracyStorage";
 import ThemeToggle from "./ThemeToggle";
+import ExcelTemplateDownloader from "./ExcelTemplateDownloader";
 
 const WordbookPlayground: React.FC = () => {
   const [wb, setWb] = React.useState<Wordbook | null>(null); // 문제풀기 버튼이 눌린 단어장
@@ -40,6 +41,7 @@ const WordbookPlayground: React.FC = () => {
       {!isDetail && !open && (
         <div>
             <WordbookUploader />
+            <ExcelTemplateDownloader />
         </div>
       )}
 
