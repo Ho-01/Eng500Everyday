@@ -18,7 +18,6 @@
   <img src="./docs/2.png" width="150"/>
   <img src="./docs/3.png" width="150"/>
   <img src="./docs/4.png" width="150"/>
-  <img src="./docs/5.png" width="150"/>
 </p>
 
 ---
